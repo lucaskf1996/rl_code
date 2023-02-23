@@ -1,2 +1,4 @@
-# rl_code
-This repository is related to the Reinforcement Learning subject (Insper/rl)
+# Reinforcement Learning code
+
+This repository keeps all the code related to the [Reinforcement Learning subject](https://insper.github.io/rl/).
+
