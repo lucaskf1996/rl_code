@@ -30,6 +30,7 @@ class QLearning:
     def train(self, filename, plotFile):
         actions_per_episode = []
         for i in range(1, self.episodes+1):
+            print(i/(self.episodes+1))
             (state, _) = self.env.reset()
             reward = 0
             done = False
@@ -41,7 +42,7 @@ class QLearning:
         
                 # Adjust Q value for current state
                 old_value = self.q_table[state, action] #pegar o valor na q-table para a combinacao action e state
-                next_max = np.max(next_state) #np.max(`do maior valor considerando next_state`)
+                next_max = np.max(self.q_table[next_state]) #np.max(`do maior valor considerando next_state`)
                 new_value = old_value + self.alpha*(reward+self.gamma*next_max-old_value) #calcula o novo valor
                 self.q_table[state, action] = new_value
                 # atualiza para o novo estado
