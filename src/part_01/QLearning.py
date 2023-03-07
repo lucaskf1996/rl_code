@@ -32,7 +32,7 @@ class QLearning:
         for i in range(1, self.episodes+1):
             print(i/(self.episodes+1))
             (state, _) = self.env.reset()
-            reward = 0
+            rewards = 0
             done = False
             actions = 0
 
@@ -48,6 +48,7 @@ class QLearning:
                 # atualiza para o novo estado
                 state = next_state
                 actions=actions+1
+                rewards=rewards+reward
 
             actions_per_episode.append(actions)
             if i % 100 == 0:
