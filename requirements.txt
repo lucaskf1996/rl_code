@@ -2,3 +2,4 @@ gymnasium
 IPython
 matplotlib
 numpy
+tensorflow
