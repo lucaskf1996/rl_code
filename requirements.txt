@@ -3,3 +3,9 @@ IPython
 matplotlib
 numpy
 tensorflow
+pygame
+box2d-py
+swig
+
+
+

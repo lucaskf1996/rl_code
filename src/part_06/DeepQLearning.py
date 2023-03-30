@@ -1,6 +1,8 @@
 import numpy as np
 import random
 from keras.activations import relu, linear
+import gc
+import keras
 
 class DeepQLearning:
 
@@ -10,7 +12,7 @@ class DeepQLearning:
     # https://arxiv.org/abs/1312.5602
     #
 
-    def __init__(self, env, gamma, epsilon, epsilon_min, epsilon_dec, episodes, batch_size, memory, model):
+    def __init__(self, env, gamma, epsilon, epsilon_min, epsilon_dec, episodes, batch_size, memory, model, max_steps):
         self.env = env
         self.gamma = gamma
         self.epsilon = epsilon
@@ -20,6 +22,7 @@ class DeepQLearning:
         self.batch_size = batch_size
         self.memory = memory
         self.model = model
+        self.max_steps = max_steps
 
     def select_action(self, state):
         if np.random.rand() < self.epsilon:
@@ -66,21 +69,17 @@ class DeepQLearning:
             (state,_) = self.env.reset()
             state = np.reshape(state, (1, self.env.observation_space.shape[0]))
             score = 0
-            
+            steps = 0
             #
             # no caso do Cart Pole eh possivel usar a condicao de done do episodio
             #
-            terminal = False
-            truncated = False
-            #max_steps = 3000 
-            # no caso do lunarland, ele pode ficar em movimentos infinitos
-            # sem alcancar um estado terminal. este eh um contador para evitar isto
-            # de qualquer forma, quando terminal = True entao o episodio termina.
-            #for _ in range(max_steps):
-            while (not terminal) or (not truncated):
+            done = False
+            while not done:
+                steps += 1
                 action = self.select_action(state)
-                #self.env.render()
                 next_state, reward, terminal, truncated, _ = self.env.step(action)
+                if terminal or truncated or (steps>self.max_steps):
+                    done = True
                 score += reward
                 next_state = np.reshape(next_state, (1, self.env.observation_space.shape[0]))
                 self.experience(state, action, reward, next_state, terminal)
@@ -90,5 +89,7 @@ class DeepQLearning:
                     print(f'Episódio: {i+1}/{self.episodes}. Score: {score}')
                     break
             rewards.append(score)
+            gc.collect()
+            keras.backend.clear_session()
 
         return rewards
