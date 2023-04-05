@@ -85,7 +85,7 @@ class DeepQLearning:
                 self.experience(state, action, reward, next_state, terminal)
                 state = next_state
                 self.experience_replay()
-                if terminal:
+                if done:
                     print(f'Episódio: {i+1}/{self.episodes}. Score: {score}')
                     break
             rewards.append(score)
